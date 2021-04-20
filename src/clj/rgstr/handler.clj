@@ -9,7 +9,11 @@
 (defroutes routes
   ;; Context name is a task requirement
   (context "/testapp" []
-    (GET "/" [] "TODO root")
+    (route/resources "/")
+    (GET "/" []
+         (rr/content-type
+          (rr/resource-response "index.html" {:root "public"})
+          "text/html"))
     (context "/applications" []
       (GET "/" []
         (rr/ok (store/get-apps store/app-store)))
