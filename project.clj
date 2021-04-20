@@ -4,6 +4,7 @@
   :min-lein-version "2.0.0"
   :jvm-opts ["-server"]
   :source-paths ["src/clj" "src/cljs"]
+  :test-paths ["test/clj" "test/cljs"]
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.844"]
                  [compojure "1.6.1"]
