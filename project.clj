@@ -1,0 +1,40 @@
+(defproject rgstr "0.1.0-SNAPSHOT"
+  :description "Application registration service"
+  :url "http://github.com/zelr0x/rgstr"
+  :min-lein-version "2.0.0"
+  :jvm-opts ["-server"]
+  :source-paths ["src/clj" "src/cljs"]
+  :dependencies [[org.clojure/clojure "1.10.0"]
+                 [org.clojure/clojurescript "1.10.844"]
+                 [compojure "1.6.1"]
+                 [ring "1.9.2"]
+                 [ring/ring-defaults "0.3.2"]
+                 [ring/ring-json "0.5.1"]
+                 [metosin/ring-http-response "0.9.2"]
+                 [re-frame "1.2.0"]]
+  :plugins [[lein-ring "0.12.5"]
+            [lein-cljsbuild "1.1.8"]]
+  :main rgstr.core
+  :ring {:handler rgstr.handler/app :port 8080}
+  :cljsbuild {:builds [{:source-paths ["src/cljs"]
+                        :compiler 
+                        {:output-to "resources/public/rgstr.js"
+                         :optimizations :whitespace
+                         :pretty-print true}}]}
+  :profiles
+  {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
+                        [ring/ring-mock "0.3.2"]
+                        [cheshire "5.10.0"]]}
+   :uberjar {:omit-source true
+             :uberjar-name "testapp.jar" ;; jar name is a task requirement
+             :prep-tasks ["clean" "compile" ["cljsbuild" "once"]]
+             :aot :all
+             :hooks [leiningen.cljsbuild]
+             :cljsbuild {:jar true
+                         :builds
+                         [{:source-paths ["src/cljs"]
+                           :compiler 
+                           {:optimizations :advanced
+                              :pretty-print false
+                              :closure-warnings {:externs-validation :off
+                                                 :non-standard-jsdoc :off}}}]}}})
