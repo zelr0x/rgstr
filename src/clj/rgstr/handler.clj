@@ -4,7 +4,8 @@
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
             [ring.middleware.json :as ring-json]
             [ring.util.http-response :as rr]
-            [rgstr.store :as store]))
+            [rgstr.store :as store]
+            [rgstr.middleware :as m]))
 
 (defroutes routes
   (route/resources "/")
@@ -24,4 +25,5 @@
   (-> routes
    (ring-json/wrap-json-body {:keys? true})
    (ring-json/wrap-json-response)
+   (m/strip-nonroot-trailing-slash-handler)
    (wrap-defaults site-defaults)))
