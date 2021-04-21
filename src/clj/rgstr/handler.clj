@@ -7,19 +7,17 @@
             [rgstr.store :as store]))
 
 (defroutes routes
-  ;; Context name is a task requirement
-  (context "/testapp" []
-    (route/resources "/")
+  (route/resources "/")
+  ;; task requirement
+  (GET "/testapp" []
+    (rr/content-type
+     (rr/resource-response "index.html" {:root "public"})
+     "text/html"))
+  (context "/api/applications" []
     (GET "/" []
-         (rr/content-type
-          (rr/resource-response "index.html" {:root "public"})
-          "text/html"))
-    (context "/applications" []
-      (GET "/" []
-        (rr/ok (store/get-apps store/app-store)))
-      (POST "/" [title description applicant 
-                 assignee due-date]
-        "TODO post")))
+      (rr/ok (store/get-apps store/app-store)))
+    (POST "/" [title description applicant assignee due-date]
+      "TODO post"))
   (route/not-found "Not found"))
 
 (def app
