@@ -19,26 +19,34 @@
                  [ring/ring-defaults "0.3.2"]
                  [ring/ring-json "0.5.1"]
                  [metosin/ring-http-response "0.9.2"]
-                 [re-frame "1.2.0"]]
+                 [reagent "1.0.0"]
+                 [re-frame "1.2.0"]
+                 [cljs-ajax "0.8.3"]]
 
   :plugins [[lein-ring "0.12.5"]
-            [lein-cljsbuild "1.1.8"]
-            [lein-figwheel "0.5.20"]]
+            [lein-cljsbuild "1.1.8"]]
 
   :main rgstr.core
   :ring {:handler rgstr.handler/app :port 8080}
   :cljsbuild {:builds {:app {:source-paths ["src/cljs"]
-                             :figwheel true
                              :compiler
                              {:output-to "resources/public/js/rgstr.js"
                               :output-dir "resources/public/js/out"
                               :asset-path "js/out"
-                              :main rgstr.core
+                              :main "rgstr.core"
                               :pretty-print true}}}}
+  :figwheel {:css-dirs ["resources/public/css"]}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring/ring-mock "0.3.2"]
-                        [cheshire "5.10.0"]]}
+                        [day8.re-frame/re-frame-10x "1.0.2"]
+                        [cheshire "5.10.0"]]
+         :plugins [[lein-figwheel "0.5.20"]]
+         :cljsbuild {:builds
+                     {:app
+                      {:figwheel {:on-jsload "rgstr.core/clear-cache-and-render!"}
+                       :compiler {:closure-defines {"re_frame.trace.trace_enabled_QMARK_" true}
+                                  :preloads [day8.re-frame-10x.preload]}}}}}
 
    :uberjar {:omit-source true
              :uberjar-name "testapp.jar" ;; jar name is a task requirement

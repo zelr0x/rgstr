@@ -1,7 +1,7 @@
 (ns rgstr.handler
   (:require [compojure.core :refer [defroutes context GET POST]]
             [compojure.route :as route]
-            [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
+            [ring.middleware.defaults :refer [api-defaults wrap-defaults]]
             [ring.middleware.json :as ring-json]
             [ring.util.http-response :as rr]
             [rgstr.store :as store]
@@ -17,8 +17,12 @@
   (context "/api/applications" []
     (GET "/" []
       (rr/ok (store/get-apps store/app-store)))
-    (POST "/" [title description applicant assignee due-date]
-      "TODO post"))
+    (POST "/" [title description applicant assignee due-date]    
+      (store/put-app! store/app-store {:title title
+                                       :description description
+                                       :applicant applicant
+                                       :assignee assignee
+                                       :due-date due-date})))
   (route/not-found "Not found"))
 
 (def app
@@ -26,4 +30,5 @@
    (ring-json/wrap-json-body {:keys? true})
    (ring-json/wrap-json-response)
    (m/strip-nonroot-trailing-slash-handler)
-   (wrap-defaults site-defaults)))
+   ;; no tls and no auth so I didn't bother with csrf either. TODO: switch to site-defaults
+   (wrap-defaults api-defaults)))
