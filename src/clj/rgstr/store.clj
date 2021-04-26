@@ -1,24 +1,37 @@
 (ns rgstr.store
-  (:import (java.util UUID)))
+  (:require [clojure.java.io :as io]
+            [datomic.api :as d]
+            [rgstr.util :as u])
+  (:import datomic.Util))
 
-(defn- identify [m]
-  (assoc m :id (UUID/randomUUID)))
+(defn- schema [] (io/resource "schema.edn"))
 
-(defrecord App
-    [id title description applicant assignee due-date])
+(defn- read-txs [tx-resource]
+  (with-open [tf (io/reader tx-resource)]
+    (Util/readAll tf)))
 
-(defrecord AtomStore [data])
+(defn- transact-all
+  ([conn txs]
+   (transact-all conn txs nil))
+  ([conn txs res]
+   (if (seq txs)
+     (transact-all conn (rest txs) @(d/transact conn (first txs)))
+     res)))
 
-(defprotocol AppStore
-  (get-apps [store])
-  (put-app! [store app]))
+;; todo: inject
+(def ^:private dev-db-uri "datomic:mem://rgstr")
+(def conn nil)
 
-(extend-protocol AppStore
-  AtomStore
-  (get-apps [store] (get @(:data store) :apps))
-  (put-app! [store app]
-    (swap! (:data store)
-           update-in [:apps] conj (identify app))))
+(defn db [] (d/db conn))
 
-(def app-store
-  (->AtomStore (atom {:apps []})))
+(defn initialize-db []
+  (d/create-database dev-db-uri)
+  (let [conn (d/connect dev-db-uri)]
+    (transact-all conn (read-txs (schema)))
+    conn))
+
+(defn start []
+  (alter-var-root #'conn (fn [_] (initialize-db))))
+
+(defn stop []
+  (alter-var-root #'conn (fn [c] (when c (d/release c)))))

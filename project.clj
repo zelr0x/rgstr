@@ -2,6 +2,7 @@
   :description "Application registration service"
   :url "http://github.com/zelr0x/rgstr"
   :min-lein-version "2.0.0"
+  :javac-options ["-source" "1.8"]
   :jvm-opts ["-server"]
 
   :source-paths ["src/clj" "src/cljs"]
@@ -22,13 +23,16 @@
                  [reagent "1.0.0"]
                  [re-frame "1.2.0"]
                  [cljs-ajax "0.8.3"]
-                 [com.datomic/datomic-free "0.9.5697"]]
+                 [com.datomic/datomic-free "0.9.5697"
+                  :exclusions [com.google.guava/guava]] ;; Datomic pulls old guava, cljs compilation fails
+                                                        ;; with NoSuchMethodError because compiler requires newer guava.
+                 [tick "0.4.31-alpha"]]
 
   :plugins [[lein-ring "0.12.5"]
             [lein-cljsbuild "1.1.8"]]
 
   :main rgstr.core
-  :ring {:handler rgstr.handler/app :port 8080}
+  :ring {:handler rgstr.handler/app :port 8080 :init rgstr.core/init}
   :cljsbuild {:builds {:app {:source-paths ["src/cljs"]
                              :compiler
                              {:output-to "resources/public/js/rgstr.js"

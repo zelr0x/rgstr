@@ -1,0 +1,42 @@
+[;; partitions
+ {:db/id #db/id[:db.part/db]
+  :db/ident :db.part/app
+  :db.install/_partition :db.part/db}
+ ;; app entity
+ {:db/doc "Application ID"
+  :db/id #db/id[:db.part/db]
+  :db/ident :app/id
+  :db/cardinality :db.cardinality/one
+  :db/valueType :db.type/uuid
+  :db/unique :db.unique/identity
+  :db.install/_attribute :db.part/db}
+ {:db/doc "Application title"
+  :db/id #db/id[:db.part/db]
+  :db/ident :app/title
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/doc "Application description"
+  :db/id #db/id[:db.part/db]
+  :db/ident :app/description
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/doc "Application author"
+  :db/id #db/id[:db.part/db]
+  :db/ident :app/applicant
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/doc "The person assigned to the appllication"
+  :db/id #db/id[:db.part/db]
+  :db/ident :app/assignee
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/doc "Application due date"
+  :db/id #db/id[:db.part/db]
+  :db/ident :app/due-date
+  :db/valueType :db.type/instant
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}]

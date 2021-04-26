@@ -15,5 +15,6 @@
        (with-response-format opts)))
 
 (defn create-app! [app]
-  (POST "/api/applications" {:url-params app
-                             :format :json}))
+  (when (every? some? (vals app))
+    (POST "/api/applications" {:url-params app
+                               :format :json})))
