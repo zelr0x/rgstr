@@ -4,11 +4,12 @@
 (defn thead [opts]
   [:thead
    (:thead-opts opts)
-   (for [[th-id col] (zipmap (range) (:cols opts))]
-     ^{:key th-id}
-     [:th
-      (ensure-assoc (:th-opts col) :scope (fn [_ _] "col"))
-      (:label col)])])
+   [:tr.tr
+    (for [[th-id col] (zipmap (range) (:cols opts))]
+      ^{:key th-id}
+      [:th
+       (ensure-assoc (:th-opts col) :scope (fn [_ _] "col"))
+       (:label col)])]])
 
 (defn tr [rec opts row-id]
   [:tr

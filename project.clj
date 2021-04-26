@@ -21,7 +21,8 @@
                  [metosin/ring-http-response "0.9.2"]
                  [reagent "1.0.0"]
                  [re-frame "1.2.0"]
-                 [cljs-ajax "0.8.3"]]
+                 [cljs-ajax "0.8.3"]
+                 [com.datomic/datomic-free "0.9.5697"]]
 
   :plugins [[lein-ring "0.12.5"]
             [lein-cljsbuild "1.1.8"]]
