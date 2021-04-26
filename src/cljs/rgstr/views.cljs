@@ -18,7 +18,7 @@
     (fn []
       [:form.form {:on-submit (fn [e]
                                 (.preventDefault e)
-                                (rf/dispatch [:app-create-form-submit @s]))}
+                                (rf/dispatch [:app-create-form-submit s]))}
        [:div.field
         [:label.label "Title"]
         [:div.control

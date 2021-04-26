@@ -4,10 +4,11 @@
             [ajax.core :refer [GET]]
             [rgstr.api :as api]))
 
+;; todo: add form clearing when... resp-ok? mostly a ux question
 (rf/reg-event-db
   :app-create-form-submit
   (fn [db [_ data]]
-    (api/create-app! data)
+    (api/create-app! @data)
     (rf/dispatch [:apps-request-data])
     db))
 
