@@ -5,6 +5,7 @@
   (:gen-class))
 
 (defn- start-server [port]
+  (println "Starting server on port" port)
   (run-jetty #'app {:port port
                     :join? false}))
 
@@ -13,6 +14,6 @@
   (store/start))
 
 (defn -main [& [port]]
-  ;; Port number is a task requirement
   (init)
+  ;; Port number is a task requirement
   (start-server (Integer. (or port 8080))))
