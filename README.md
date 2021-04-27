@@ -9,6 +9,13 @@ This project is an assigned task requiring the app to be accessible at
 `localhost:8080/testapp` and having `testapp.jar` name.
 
 
+## TODO
+* Add feedback to app creation form. Reset form on successful submit. Prevent accidental double submit.
+* Fix table formatting (view.cljs), namely dates and string clamping.
+* Address the issues outlined in various comments in code.
+* Move to a more flexible table component?
+
+
 ## Prerequisites
 
 You will need [Leiningen][] 2.0.0 or above installed.
