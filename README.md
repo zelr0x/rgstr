@@ -10,7 +10,7 @@ This project is an assigned task requiring the app to be accessible at
 
 
 ## TODO
-* Add feedback to app creation form. Reset form on successful submit. Prevent accidental double submit.
+* Add feedback to app creation form. Reset form on successful submit. Prevent accidental double submit. Should be easy with reagent-forms.
 * Fix table formatting (view.cljs), namely dates and string clamping.
 * Address the issues outlined in various comments in code.
 * Move to a more flexible table component?

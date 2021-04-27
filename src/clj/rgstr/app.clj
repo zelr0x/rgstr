@@ -20,7 +20,7 @@
   (when (every? some? (vals app)) ;; todo: refactor check
     (let [tmp-id (d/tempid :db.part/user)
           gid (d/squuid)
-          due-date (u/ld->date (:app/due-date app))
+          due-date (u/to-date (:app/due-date app))
           app (-> app (assoc :db/id tmp-id
                              :app/id gid
                              :app/due-date due-date))

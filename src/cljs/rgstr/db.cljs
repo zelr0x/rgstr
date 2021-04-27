@@ -3,4 +3,5 @@
 
 (def default-db
   {:apps {:data []
-          :loading? false}})
+          :loading? false}
+   :app-create-form {:data {}}})

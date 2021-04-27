@@ -26,6 +26,10 @@
         (ld->ldt)
         (ldt->date))))
 
+(defmulti to-date class)
+(defmethod to-date java.util.Date [d] d)
+(defmethod to-date java.time.LocalDate [ld] (ld->date ld))
+
 ;; FIXME: this is kinda major bad thing...
 ;; I'm not sure how and where use and destructure namespaced (using /) 
 ;; keywords properly. All solutions I tried don't seem to work, so I used this.

@@ -26,7 +26,8 @@
                  [com.datomic/datomic-free "0.9.5697"
                   :exclusions [com.google.guava/guava]] ;; Datomic pulls old guava, cljs compilation fails
                                                         ;; with NoSuchMethodError because compiler requires newer guava.
-                 [tick "0.4.31-alpha"]]
+                 [tick "0.4.31-alpha"]
+                 [reagent-forms "0.5.44"]]
 
   :plugins [[lein-ring "0.12.5"]
             [lein-cljsbuild "1.1.8"]]

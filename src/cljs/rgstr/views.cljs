@@ -1,7 +1,9 @@
 (ns rgstr.views
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
-            [rgstr.table :refer [table]]))
+            [rgstr.table :refer [table]]
+            [reagent-forms.core :refer [bind-fields]]
+            [clojure.string :as str]))
 
 (defn hero []
   [:div.hero.is-primary 
@@ -9,49 +11,45 @@
     [:h1.title "rgstr"]
     [:h2.subtitle "rgstr applications"]]])
 
-(defn app-create-form [title applicant assignee due-date description]
-  (let [s (r/atom {:title title
-                   :applicant applicant
-                   :assignee assignee
-                   :due-date due-date
-                   :description description})]
-    (fn []
-      [:form.form {:on-submit (fn [e]
-                                (.preventDefault e)
-                                (rf/dispatch [:app-create-form-submit s]))}
-       [:div.field
-        [:label.label "Title"]
-        [:div.control
-         [:input.input {:type :text :name :title
-                        :value (:title @s)
-                        :on-change #(swap! s assoc :title (-> % .-target .-value))}]]]
-       [:div.field
-        [:label.label "Applicant"]
-        [:div.control
-         [:input.input {:type :text :name :applicant
-                        :value (:applicant @s)
-                        :on-change #(swap! s assoc :applicant (-> % .-target .-value))}]]]
-       [:div.field
-        [:label.label "Assignee"]
-        [:div.control
-         [:input.input {:type :text :name :assignee
-                        :value (:assignee @s)
-                        :on-change #(swap! s assoc :assignee (-> % .-target .-value))}]]]
-       [:div.field
-        [:label.label "Due date"]
-        [:div.control
-         [:input.input {:type :text :name :due-date
-                        :value (:due-date @s)
-                        :on-change #(swap! s assoc :due-date (-> % .-target .-value))}]]]
-       [:div.field
-        [:label.label "Description"]
-        [:div.control
-         [:textarea.textarea {:name :description
-                              :on-change #(swap! s assoc :description (-> % .-target .-value))}
-          (:description @s)]]]
-       [:div.field.is-grouped.is-grouped-right
-        [:p.control.mt-3
-         [:input.button.is-primary {:value "Register" :type "submit"}]]]])))
+(def events
+  {:get (fn [path] @(rf/subscribe [:app-create-form-value path]))
+   :save! (fn [path value] (rf/dispatch [:app-create-form-set-value path value]))
+   :update! (fn [path save-fn value]
+              ; save-fn should accept two arguments: old-value, new-value
+              (rf/dispatch [:app-create-form-update-value save-fn path value]))
+   :doc (fn [] @(rf/subscribe [:app-create-form-data]))})
+
+(defn app-create-form []
+  [bind-fields
+   [:form.form {:on-submit (fn [e]
+                             (.preventDefault e)
+                             (rf/dispatch [:app-create-form-submit]))}
+    [:div.field
+     [:label.label "Title"]
+     [:div.control
+      [:input.input {:field :text :id :title}]]]
+    [:div.field
+     [:label.label "Applicant"]
+     [:div.control
+      [:input.input {:field :text :id :applicant}]]]
+    [:div.field
+     [:label.label "Assignee"]
+     [:div.control
+      [:input.input {:field :text :id :assignee}]]]
+    [:div.field
+     [:label.label "Due date"]
+     [:div.control
+      [:input.input.datepicker {:field :datepicker :id :due-date
+                                :auto-close? true
+                                :date-format "yyyy-mm-dd" :inline true}]]]
+    [:div.field
+     [:label.label "Description"]
+     [:div.control
+      [:textarea.textarea {:field :textarea :id :description}]]]
+    [:div.field.is-grouped.is-grouped-right
+     [:p.control.mt-3
+      [:input.button.is-primary {:value "Register" :type "submit"}]]]]
+   events])
 
 (defn app-create-section []
   [:div.section  
